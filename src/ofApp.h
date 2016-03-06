@@ -4,6 +4,7 @@
 #include "ofxNoise.h"
 ////#include "ofxQtVideoSaver.h"
 #include "ofxVideoRecorder.h"
+#include "ofxDatGui.h"
 
 class ofApp : public ofBaseApp{
 
@@ -57,4 +58,7 @@ class ofApp : public ofBaseApp{
     //void audioOut(float * input, int bufferSize, int nChannels);
     ofImage sheepImg;
     int sampleCount;
+    
+    ofxDatGui* gui;
+    ofxDatGuiSlider* numSeedsSlider;
 };
