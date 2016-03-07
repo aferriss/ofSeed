@@ -113,6 +113,29 @@ void ofApp::setup(){
     numSeedsSlider = gui->addSlider("Num seeds", 0, 1000);
     numSeedsSlider->setPrecision(0);
     
+    xNoise = gui->addSlider("X noise", 0, 0.1);
+    yNoise = gui->addSlider("Y noise", 0, 0.1);
+    zNoise = gui->addSlider("Z noise", 0, 0.1);
+    
+    xNoise->setPrecision(5);
+    yNoise->setPrecision(5);
+    zNoise->setPrecision(5);
+    
+    xNoise->setValue(0.0007);
+    yNoise->setValue(0.0009);
+    zNoise->setValue(0.001);
+    
+    
+    stepSlider = gui->addSlider("I-Step", 0.001,5);
+    stepSlider->setPrecision(4);
+    stepSlider->setValue(2);
+    
+    randSlider= gui->addSlider("Random Amt", 0,5);
+    randSlider->setPrecision(4);
+    randSlider->setValue(1.116);
+    
+    hideGui = false;
+    ofxDatGuiLog::quiet();
 }
 
 //--------------------------------------------------------------
@@ -273,7 +296,7 @@ void ofApp::updateSeeds(){
         //screen.setFromPixels(pixPtr, w, h, OF_IMAGE_COLOR);
         //screen.setFromPixels();
         
-        int n = int(abs(noise->noise(zOff, yOff, xOff))*tan(sin(ofRandom(ofRandom(ofGetFrameNum()*0.9))*30.141592)*1.36))%512;
+        int n = int(abs(noise->noise(zOff, yOff, xOff))*tan(sin(ofRandom(ofRandom(ofGetFrameNum()*0.9))*30.141592)*randSlider->getValue()))%512;
         
         //cout<<ofToString(c)<<endl;
         briMod = int(ofRandom(0,2));
@@ -288,7 +311,7 @@ void ofApp::updateSeeds(){
         
         //ofRect(0, 0, 100, 100);
         //inc+=0.001;
-        int iStep = i /2;
+        int iStep = i / stepSlider->getValue();
         
         if(y>iStep && !traversed[upIndex]){
             seeds.push_back(upIndex);
@@ -341,14 +364,14 @@ void ofApp::updateSeeds(){
 
         seeds.erase(seeds.begin()+i);
         
-        xOff+=0.0007;
-        yOff+=0.0009;
+        xOff+=xNoise->getValue();
+        yOff+=yNoise->getValue();
         
         
         
         
     }
-    zOff+=0.001;
+    zOff+=zNoise->getValue();
     
     //if(ofGetFrameNum()%300 == 0){
         screen.setFromPixels(pixPtr, w, h, OF_IMAGE_COLOR);
@@ -413,6 +436,11 @@ void ofApp::keyPressed(int key){
             traversed = new bool[w*h];
         }
         noise->noiseSeed(ofRandom(10000000));
+    }
+    
+    if(key == 'h'){
+        hideGui = !hideGui;
+        gui->setVisible(hideGui);
     }
 }
 

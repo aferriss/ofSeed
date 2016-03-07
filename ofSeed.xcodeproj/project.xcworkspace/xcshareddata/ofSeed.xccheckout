@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>0962EB6E-C47D-4B52-AC3C-BB379C0CBF5D</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ofSeed</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>4131F34236DEB94090351DE98CD44A123F2873AB</key>
+		<string>https://github.com/timscaffidi/ofxVideoRecorder.git</string>
+		<key>84A634BACD462D0719F34F0F34EE29CA207FA54D</key>
+		<string>https://github.com/aferriss/ofSeed.git</string>
+		<key>9233F0F4A2BE011BD468E5177A5AD6623263B23D</key>
+		<string>https://github.com/braitsch/ofxDatGui.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ofSeed.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>4131F34236DEB94090351DE98CD44A123F2873AB</key>
+		<string>../../../../../addons/ofxVideoRecorder</string>
+		<key>84A634BACD462D0719F34F0F34EE29CA207FA54D</key>
+		<string>../..</string>
+		<key>9233F0F4A2BE011BD468E5177A5AD6623263B23D</key>
+		<string>../../../../../addons/ofxDatGui</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/aferriss/ofSeed.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>84A634BACD462D0719F34F0F34EE29CA207FA54D</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>84A634BACD462D0719F34F0F34EE29CA207FA54D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofSeed</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9233F0F4A2BE011BD468E5177A5AD6623263B23D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxDatGui</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4131F34236DEB94090351DE98CD44A123F2873AB</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxVideoRecorder</string>
+		</dict>
+	</array>
+</dict>
+</plist>

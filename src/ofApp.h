@@ -58,7 +58,12 @@ class ofApp : public ofBaseApp{
     //void audioOut(float * input, int bufferSize, int nChannels);
     ofImage sheepImg;
     int sampleCount;
-    
+    bool hideGui;
     ofxDatGui* gui;
     ofxDatGuiSlider* numSeedsSlider;
+    ofxDatGuiSlider* xNoise;
+    ofxDatGuiSlider* yNoise;
+    ofxDatGuiSlider* zNoise;
+    ofxDatGuiSlider* stepSlider;
+    ofxDatGuiSlider* randSlider;
 };
