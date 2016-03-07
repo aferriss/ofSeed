@@ -7,8 +7,8 @@ float g3 = 150;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    w = 960;
-    h = 2400;
+    w = 1024;
+    h = 2048;
     
     //ofSeedRandom(1000);
     
@@ -22,10 +22,10 @@ void ofApp::setup(){
     reposShader.load("shaders/repos");
     emboss.load("shaders/emboss");
     
-    sheepStencil.load("sheepStencil3.png");
-    
-    sheepImg.load("stencilL.png");
-    sheepImg.resize(w, h);
+//    sheepStencil.load("sheepStencil3.png");
+//    
+//    sheepImg.load("stencilL.png");
+//    sheepImg.resize(w, h);
     
     finishIt = false;
     numRandSeeds = 1;
@@ -55,6 +55,7 @@ void ofApp::setup(){
     screen.setUseTexture(true);
     
     traversed = new bool[w*h*4];
+    
     
     
     noise = new ofxPerlin();
@@ -117,9 +118,9 @@ void ofApp::setup(){
     yNoise = gui->addSlider("Y noise", 0, 0.1);
     zNoise = gui->addSlider("Z noise", 0, 0.1);
     
-    xNoise->setPrecision(5);
-    yNoise->setPrecision(5);
-    zNoise->setPrecision(5);
+    xNoise->setPrecision(10);
+    yNoise->setPrecision(10);
+    zNoise->setPrecision(10);
     
     xNoise->setValue(0.0007);
     yNoise->setValue(0.0009);
@@ -128,11 +129,11 @@ void ofApp::setup(){
     
     stepSlider = gui->addSlider("I-Step", 0.001,5);
     stepSlider->setPrecision(4);
-    stepSlider->setValue(2);
+    stepSlider->setValue(1);
     
-    randSlider= gui->addSlider("Random Amt", 0,5);
+    randSlider= gui->addSlider("Random Amt", 1,1.2);
     randSlider->setPrecision(4);
-    randSlider->setValue(1.116);
+    randSlider->setValue(1.1888);
     
     hideGui = false;
     ofxDatGuiLog::quiet();
@@ -228,9 +229,9 @@ void ofApp::draw(){
     
     screen.draw(0,0);
         
-    
+//    
     reposFbo.end();
-    
+//
     reposFbo.draw(0,0, w/2, h/2);
 //  stenTex.draw(0,0);
 
@@ -239,14 +240,14 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::updateSeeds(){
-
+    float xOff = 0.0;
+    float zOff = 0.0;
     
     
     //float xOff = ofGetElapsedTimef()*0.9;
     //float zOff = ofGetElapsedTimef()*0.8;
     
-    float xOff = 0.0;
-    float zOff = 0.0;
+
     
     
     /*
@@ -276,9 +277,9 @@ void ofApp::updateSeeds(){
         //float g = 255-ofSignedNoise(xOff,yOff,zOff,ofGetElapsedTimef()/30)*512; //green
         //float b = 255-ofSignedNoise(yOff,zOff,yOff,ofGetElapsedTimef()/30)*512; //blue
         
-        float r2 = 255 - noise->noise(xOff, yOff, zOff) * 512;
-        float g2 = 255 - noise->noise(yOff, zOff, xOff) * 512;
-        float b2 = 255 - noise->noise(zOff, xOff, yOff) * 512;//(noise->noise(zOff));
+        float r2 = 255 - noise->noiseuf(xOff, yOff, zOff) * 512;
+        float g2 = 255 - noise->noiseuf(yOff, zOff, xOff) * 512;
+        float b2 = 255 - noise->noiseuf(zOff, xOff, yOff) * 512;//(noise->noise(zOff));
         
         float briMod = r2;
         briMod = int(ofMap(briMod,0,255,0,3));
@@ -296,16 +297,16 @@ void ofApp::updateSeeds(){
         //screen.setFromPixels(pixPtr, w, h, OF_IMAGE_COLOR);
         //screen.setFromPixels();
         
-        int n = int(abs(noise->noise(zOff, yOff, xOff))*tan(sin(ofRandom(ofRandom(ofGetFrameNum()*0.9))*30.141592)*randSlider->getValue()))%512;
+        int n = int(abs(noise->noise(zOff, yOff, xOff))*tan(sin(ofRandom(ofRandom(ofGetFrameNum()*0.9))*3.141592)*randSlider->getValue()))%256;
         
         //cout<<ofToString(c)<<endl;
         briMod = int(ofRandom(0,2));
         
         //---------Up, Right, Down, Left
-        int upIndex = seeds[i] - w -n;//+ briMod;// (int)ofMap(ofNoise(xOff,yOff),0,1,0,int(ofRandom(2)));
-        int rightIndex = seeds[i] + 1+n ;//- briMod;// (int)ofMap(ofNoise(xOff,yOff),0,1,0,int(ofRandom(2)));
-        int downIndex = seeds[i] + w +n;//- briMod;// (int)ofMap(ofNoise(xOff,yOff),0,1,0,int(ofRandom(2)));
-        int leftIndex = seeds[i] - 1 -n;//+ briMod;// (int)ofMap(ofNoise(xOff,yOff),0,1,0,int(ofRandom(2)));
+        int upIndex = seeds[i] - w ;//+ briMod;// (int)ofMap(ofNoise(xOff,yOff),0,1,0,int(ofRandom(2)));
+        int rightIndex = seeds[i] + 1 ;//- briMod;// (int)ofMap(ofNoise(xOff,yOff),0,1,0,int(ofRandom(2)));
+        int downIndex = seeds[i] + w ;//- briMod;// (int)ofMap(ofNoise(xOff,yOff),0,1,0,int(ofRandom(2)));
+        int leftIndex = seeds[i] - 1 ;//+ briMod;// (int)ofMap(ofNoise(xOff,yOff),0,1,0,int(ofRandom(2)));
         
         //ofSetColor(c);
         
@@ -313,7 +314,7 @@ void ofApp::updateSeeds(){
         //inc+=0.001;
         int iStep = i / stepSlider->getValue();
         
-        if(y>iStep && !traversed[upIndex]){
+        if(y-iStep>0 && !traversed[upIndex]){
             seeds.push_back(upIndex);
             traversed[upIndex] = true;
         }
@@ -328,24 +329,24 @@ void ofApp::updateSeeds(){
             traversed[downIndex] = true;
         }
         
-        if(x > iStep && !traversed[leftIndex]){
+        if(x-i > 0 && !traversed[leftIndex]){
             seeds.push_back(leftIndex);
             traversed[leftIndex] = true;
         }
         
         
         //---------Upper Left, Upper Right, Lower Left, Lower Right 
-        int ulIndex = seeds[i] - w -n;
-        int urIndex = seeds[i] - w +n;
-        int llIndex = seeds[i] + w -n;
-        int lrIndex = seeds[i] + w +n;
-        
-        if(x>i && y>i && !traversed[ulIndex]){
+        int ulIndex = seeds[i] - w - 1 - int(ofRandom(-2,2));//int(ofMap(noise->noise(xOff, yOff), -1,1,-2,2));
+        int urIndex = seeds[i] - w + 1 + int(ofRandom(-2,2));//int(ofMap(noise->noise(xOff, yOff), -1,1,-2,2));
+        int llIndex = seeds[i] + w - 1 - int(ofRandom(-2,2));//int(ofMap(noise->noise(xOff, yOff), -1,1,-2,2));
+        int lrIndex = seeds[i] + w + 1 + int(ofRandom(-2,2));//int(ofMap(noise->noise(xOff, yOff), -1,1,-2,2));
+    
+        if(x-i>0 && y-i>0 && !traversed[ulIndex]){
             seeds.push_back(ulIndex);
             traversed[ulIndex] = true;
         }
         
-        if( y>i && !traversed[urIndex]){
+        if( y-i>0 && !traversed[urIndex]){
             seeds.push_back(urIndex);
             traversed[urIndex] = true;
         }
@@ -367,11 +368,9 @@ void ofApp::updateSeeds(){
         xOff+=xNoise->getValue();
         yOff+=yNoise->getValue();
         
-        
-        
-        
     }
-    zOff+=zNoise->getValue();
+//    cout<<ofToString(xOff)<<endl;
+    zOff+= zNoise->getValue();
     
     //if(ofGetFrameNum()%300 == 0){
         screen.setFromPixels(pixPtr, w, h, OF_IMAGE_COLOR);
