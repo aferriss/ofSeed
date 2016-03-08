@@ -24,7 +24,21 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		
+    
+        struct Pixel {
+            ofVec3f pixelColor;
+            float pixelBri;
+            //int pixelX;
+            //int pixelY;
+            int pixelLoc;
+            
+            bool operator<(const Pixel& a) const{
+                return pixelLoc < a.pixelLoc;
+            }
+
+        };
+    vector<Pixel> pixelArray;
+    
     vector<int> seeds;
     //vector<bool> traversed;
     //bool traversed;
@@ -66,4 +80,8 @@ class ofApp : public ofBaseApp{
     ofxDatGuiSlider* zNoise;
     ofxDatGuiSlider* stepSlider;
     ofxDatGuiSlider* randSlider;
+    
+    bool useImage;
+    ofImage earthImg;
+    ofPixels earthPix;
 };

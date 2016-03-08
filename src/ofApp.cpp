@@ -1,6 +1,7 @@
 #include "ofApp.h"
 #include <iostream>
 #include <vector>
+#include <algorithm>
 float theta = 0.0;
 float g3 = 150;
 //cp -r bin/data "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Resources";  
@@ -8,13 +9,13 @@ float g3 = 150;
 //--------------------------------------------------------------
 void ofApp::setup(){
     w = 1024;
-    h = 2048;
+    h = 1024;
     
     //ofSeedRandom(1000);
     
     inc = 0.000001;
     
-    ofSetWindowShape(w/2, h/2);
+    ofSetWindowShape(w, h);
     
     //ofSetDataPathRoot("../Resources/data");
         
@@ -109,6 +110,42 @@ void ofApp::setup(){
 //        
 //        //cout<<ofToString(int(sheepPix[i*4+3]))<<endl;
 //    }
+    
+    useImage = true;
+    
+    if(useImage){
+        earthImg.load("images/mountains.jpg");
+        earthImg.resize(w, h);
+        earthPix = earthImg.getPixels();
+        
+//        vector<int> redPix;
+        
+//        for(int i = 0; i<w*h; i++){
+//            int redPixel = (int)earthPix[i*3];
+//            redPix.push_back(redPixel);
+//        }
+//        
+//        std::sort(redPix.begin(), redPix.end());
+//        
+//        for(int i = 0; i<w*h; i++){
+//            earthPix[i*3] = redPix[i];
+//        }
+        for(int i =0; i<w*h; i++){
+            Pixel p;
+            p.pixelColor.x = (int)earthPix[i*3];
+            p.pixelColor.y = (int)earthPix[i*3+1];
+            p.pixelColor.z = (int)earthPix[i*3+2];
+            
+            p.pixelLoc = i;
+            
+            p.pixelBri = (p.pixelColor.x + p.pixelColor.y + p.pixelColor.y)/3;
+            
+            pixelArray.push_back(p);
+        }
+        
+    }
+    
+    
     gui = new ofxDatGui(0,0);
     
     numSeedsSlider = gui->addSlider("Num seeds", 0, 1000);
@@ -175,6 +212,51 @@ void ofApp::draw(){
         updateSeeds();
     }
     
+    vector<int> redPix (seeds.size(), 0);
+    vector<int> greenPix (seeds.size(), 0);
+    vector<int> bluePix (seeds.size(), 0);
+    
+    vector<Pixel> pixpix;
+    
+    
+    auto screenPix = screen.getPixels();
+    
+    for (int i = seeds.size()-1; i>= 0; i--){
+//        pixpix [i] = pixelArray[ seeds[i] ].pixelBri;
+        pixpix.push_back( pixelArray[seeds[i]]);
+        //pixpix[i] = pixelArray[ seeds[i] ];
+        
+//        redPix[ i ] = (int)earthPix[ seeds[i] *3 ];
+//        greenPix[ i ] = (int)earthPix[ seeds[i] * 3 +1];
+//        bluePix[ i ] = (int)earthPix[ seeds[i] *3 +2];
+    }
+    
+//    std::sort(redPix.begin(), redPix.end());
+//    std::sort(greenPix.begin(), greenPix.end());
+//    std::sort(bluePix.begin(), bluePix.end());
+    std::sort(pixpix.begin(), pixpix.end());
+    
+    
+    
+    for(int i = seeds.size()-1; i>=0; i--){
+        int loc = i;
+        screenPix[ seeds[i] *3] = pixpix[loc].pixelColor.x;
+        screenPix[ seeds[i] *3+1] = pixpix[loc].pixelColor.y;
+        screenPix[ seeds[i] *3+2] = pixpix[loc].pixelColor.z;
+//        screenPix[loc+1] = 0;
+//        screenPix[loc+2] = 0;
+    }
+    
+//    for(int i = 0; i<w*h; i++){
+//        int loc = i*3;
+//        screenPix[loc] = 255;
+//        screenPix[loc+1] = 0;
+//        screenPix[loc+2] = 0;
+//    }
+    
+    screen.setFromPixels(screenPix);
+    screen.update();
+    
     if(step < steps){
         step++;
         //cout<<ofToString(step)+"/"+ofToString(steps)<<endl;
@@ -232,7 +314,7 @@ void ofApp::draw(){
 //    
     reposFbo.end();
 //
-    reposFbo.draw(0,0, w/2, h/2);
+    reposFbo.draw(0,0, w, h);
 //  stenTex.draw(0,0);
 
     
@@ -289,11 +371,16 @@ void ofApp::updateSeeds(){
         //screen.setColor(x, y, c);
         
         int loc = (y*w+ x)*3;
-
-        pixPtr[loc] = r2;//sheepPtr[loc] * (r2*0.025);
-        pixPtr[loc+1] = g2;//sheepPtr[loc] * (r2*0.025);
-        pixPtr[loc+2] = b2;//sheepPtr[loc] * (r2*0.025);
         
+        if(useImage){
+//            pixPtr[loc] = earthPix[loc];
+//            pixPtr[loc+1] = earthPix[loc+1];
+//            pixPtr[loc+2] = earthPix[loc+2];
+        } else{
+            pixPtr[loc] = r2;//sheepPtr[loc] * (r2*0.025);
+            pixPtr[loc+1] = g2;//sheepPtr[loc] * (r2*0.025);
+            pixPtr[loc+2] = b2;//sheepPtr[loc] * (r2*0.025);
+        }
         //screen.setFromPixels(pixPtr, w, h, OF_IMAGE_COLOR);
         //screen.setFromPixels();
         
@@ -373,7 +460,7 @@ void ofApp::updateSeeds(){
     zOff+= zNoise->getValue();
     
     //if(ofGetFrameNum()%300 == 0){
-        screen.setFromPixels(pixPtr, w, h, OF_IMAGE_COLOR);
+//        screen.setFromPixels(pixPtr);
     //}
     
     }
