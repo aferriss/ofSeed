@@ -9,13 +9,13 @@ float g3 = 150;
 //--------------------------------------------------------------
 void ofApp::setup(){
     w = 1024;
-    h = 1024;
+    h = 2048;
     
     //ofSeedRandom(1000);
     
     inc = 0.000001;
     
-    ofSetWindowShape(w, h);
+    ofSetWindowShape(w, w);
     
     //ofSetDataPathRoot("../Resources/data");
         
@@ -25,7 +25,12 @@ void ofApp::setup(){
     
 //    sheepStencil.load("sheepStencil3.png");
 //    
-//    sheepImg.load("stencilL.png");
+//    sheepImg.load("images/sheep4S.jpg");
+//    w = sheepImg.getWidth();
+//    h = sheepImg.getHeight();
+//    sheepPix = sheepImg.getPixels();
+    
+    
 //    sheepImg.resize(w, h);
     
     finishIt = false;
@@ -114,7 +119,7 @@ void ofApp::setup(){
     useImage = true;
     
     if(useImage){
-        earthImg.load("images/mountains.jpg");
+        earthImg.load("images/mountains2blur2.jpg");
         earthImg.resize(w, h);
         earthPix = earthImg.getPixels();
         
@@ -142,7 +147,6 @@ void ofApp::setup(){
             
             pixelArray.push_back(p);
         }
-        
     }
     
     
@@ -240,9 +244,11 @@ void ofApp::draw(){
     
     for(int i = seeds.size()-1; i>=0; i--){
         int loc = i;
+//        if( (int)sheepPix[ seeds[i]*3 ] <= 30){
         screenPix[ seeds[i] *3] = pixpix[loc].pixelColor.x;
         screenPix[ seeds[i] *3+1] = pixpix[loc].pixelColor.y;
         screenPix[ seeds[i] *3+2] = pixpix[loc].pixelColor.z;
+//        }
 //        screenPix[loc+1] = 0;
 //        screenPix[loc+2] = 0;
     }

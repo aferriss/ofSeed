@@ -71,6 +71,7 @@ class ofApp : public ofBaseApp{
     //ofSoundStream soundStream;
     //void audioOut(float * input, int bufferSize, int nChannels);
     ofImage sheepImg;
+    ofPixels sheepPix;
     int sampleCount;
     bool hideGui;
     ofxDatGui* gui;
